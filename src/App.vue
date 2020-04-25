@@ -1,32 +1,54 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+		<router-view v-if="created"/>
   </div>
 </template>
 
+<script>
+import {getActivity,checkID} from "./assets/axios/api.js"
+export default{
+	data(){
+		return{
+			created: false
+		}
+	},
+	created() {
+		getActivity("")
+		.then(res => {
+			this.$store.commit("setActivity",res.data)
+			const endTime = +(new Date(this.$store.state.activity.endTime))
+			const now = +(new Date())
+			if(now > endTime){
+				this.$showModel({
+					head: "提示",
+					text: "本期活动已过期",
+				})
+				return
+			}
+			// 活动未过期
+			else{
+				const id = localStorage.getItem("userID")
+				if(id)
+					checkID({
+						id: id
+					})
+					.then(res => {
+						this.$store.commit("setUserData",res.data)
+						this.created = true
+					})
+					.catch(err => {
+						localStorage.removeItem("userID")
+						this.created = true
+					})
+				else//没有登录存储
+					this.created = true
+			}
+		})
+	}
+}
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
+@import url("./assets/common.css");
+@import url("./assets/icon/iconfont.css");
 </style>

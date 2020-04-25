@@ -6,9 +6,10 @@ module.exports = {
 	lintOnSave: false, //是否开启eslint保存检测
 	devServer: { //生产环境配置
 		open: false,
-		host: 'localhost',
+		// host: 'localhost',
+		host: "192.168.1.17",
 		port: 8080,
-		https: false,
+		https: true,
 		hotOnly: false,
 	  proxy: {
 			'/api': {
@@ -23,4 +24,9 @@ module.exports = {
 		}, 
 		before: app => {}
 	},
+	configureWebpack: {
+		externals: {
+			'AMap': 'AMap' // 高德地图配置
+		}
+	}
 }
