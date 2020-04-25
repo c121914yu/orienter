@@ -83,8 +83,10 @@ export default{
 				}
 			})
 			// 添加点击事件
-			marker.on("touchend",(e) => {
-				this.currentObj = obj
+			marker.on("click",(e) => {
+				setTimeout(() => {
+					this.currentObj = obj
+				})
 			})
 			return marker
 		},
