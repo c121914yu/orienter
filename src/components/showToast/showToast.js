@@ -8,8 +8,7 @@ let showToast = (data) => {
   })
   document.body.appendChild(dom.$el) //把组件的dom添加到body里 
 	
-  dom.type = data.type || "success"
-  dom.text = data.text || "提示"
-	dom.time = data.time || 1500
+  dom.type = data.type
+  dom.text = data.text
 }
 export default showToast
